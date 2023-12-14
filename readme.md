@@ -3,8 +3,6 @@ Advance Time Series
 Théo Ferry, Daniel Bonnéry
 Jan 12, 2024
 
-# Advanced Time series
-
 ## How to run
 
 ### Install the following packages:

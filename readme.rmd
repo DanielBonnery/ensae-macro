@@ -5,8 +5,6 @@ date: Jan 12, 2024
 output: github_document
 ---
 
-# Advanced Time series
-
 ## How to run 
 
 ### Install the following packages:
