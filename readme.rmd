@@ -1,0 +1,35 @@
+---
+title: "Advance Time Series"
+author: Théo Ferry, Daniel Bonnéry
+date: Jan 12, 2024
+output: github_document
+---
+
+# Advanced Time series
+
+## How to run 
+
+### Install the following packages:
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,error=FALSE,results=FALSE}
+renv::dependencies("R")$Package|>unique()|>sort()|>setdiff(c(
+  "montruc","LocustAnalysis","synthpop"))|>paste(collapse = ", ")->xx
+```
+
+`r xx`
+
+### Copy and execute the project:
+
+- Clone the project to a local repository
+via:
+
+```{r,eval=FALSE}
+system("git clone https://github.com/DanielBonnery/ensae-macro.git")
+```
+
+- open the .rproj file in Rstudio
+- run:
+
+```{r,eval=FALSE}
+source(demo/main.R)
+```
