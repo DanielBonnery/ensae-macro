@@ -1,6 +1,13 @@
 rm(list=ls())
-"script/checdata.R"|>source()->noprint
+
+library(ggplot2)
+
+
+c("script/checdata.R",
+  "m2r/plot_y.r")|>sapply(source)->noprint
 spl = cbind(c(1984,2016),c(2,12));
+
+
 #spl = cbind(c(1984,2008),c(2,12));# Dec2008 ZLB reached
 #spl = cbind(c(1990,2016),c(2,12));# Feb1999 surprises start
 #spl = cbind(c(1979,2016),c(7,12));# GertlerKaradi2015 sample 
@@ -109,35 +116,38 @@ rm( d,  tbeg, tend, ysel)
 
 
 
-datatemp = .data#checkdata(.data, t2datestr, 1:data.Nm);
+datatemp = .data
+#checkdata(.data, t2datestr, 1:data.Nm);
 idspl = paste0(t2datestr(datatemp$time[1]), 
                '-', 
                t2datestr(datatemp$time[length(datatemp$time)]));
 
 # output file names
 fname = file.path(path_out,paste0(modname, '_', paste0(mnames,sep='_'), '_', idspl, '_', idscheme));
-diary([fname '.txt'])
-data = checkdata(data, t2datestr, 1:data.Nm); # again, for the diary
-plot_y;
+#diary([fname '.txt'])
+#data = checkdata(data, t2datestr, 1:data.Nm); # again, for the diary
+plot_y(.data,whichplot = c(TRUE,TRUE))->plots;
+plots[[1]]
+plots[[2]]
 
 # print the correlation matrix of m
-table = corr(data.y(:,1:data.Nm),'rows','pairwise');
-in.cnames = strvcat(mnames);
-in.rnames = strvcat(['correl.:' mnames]);
-in.width = 200;
-mprint(table,in)
+.table = var(.data,use = "pairwise.complete.obs");
+corrtable=.table/(sqrt(c(diag(.table))%*%t(c(diag(.table)))))
+corrtable
 
 # complete the minnesota prior
-prior.minnesota.mvector = [zeros(data.Nm,1); nonst];
+prior.minnesota.mvector = c(rep(0,data.Nm), nonst);
 
 # replace NaNs with zeros in the initial condition
-temp = data.y(1:prior.lags,:); temp(isnan(temp)) = 0; data.y(1:prior.lags,:) = temp; 
+temp = .data[1:prior.lags,,]; 
+temp[is.an(temp)] <- 0; 
+.data[1:prior.lags,] <- temp; 
 
 # drop the shocks before February 1994
-#id = data.time<ym2t([1994 2])-1e-6; data.y(id,1:data.Nm) = NaN;
+#id = data.time<ym2t([1994 2])-1e-6; .data(id,1:data.Nm) = NaN;
 
 # estimate the VAR
-#data.y(isnan(data.y)) = 0; res = VAR_dummyobsprior(data.y,data.w,gssettings.ndraws,prior);
+#.data(isnan(.data)) = 0; res = VAR_dummyobsprior(.data,data.w,gssettings.ndraws,prior);
 res = VAR_withiid1kf(data, prior, gssettings);
 
 savedata([fname '_data.csv'], data, t2ym)
