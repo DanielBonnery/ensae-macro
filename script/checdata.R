@@ -6,13 +6,12 @@ checkdata<-function(.data, t2datestr, ignorecols=character(0)){
   # data.names - variable names, cell 1 x N
   # ignorecols - indexes of columns to ignore
   
-  N = ncol(.data);
-  
-  plyr::ldply(.data,function(x){
-    ifirst = min(which(is.na(x)));
-    ilast = max(which(is.na(x)));
+  ibegend=.data$y[!is.element(names(.data$y),ignorecols)]|>
+  plyr::ldply(function(x){
+    ifirst = min(which(!is.na(x)));
+    ilast = max(which(!is.na(x)));
     if (ifirst==Inf){ifirst = 1}
-    if (ilast==-Inf){ ilast = nrow(.data)}
+    if (ilast==-Inf){ ilast = nrow(.data$y)}
     nmid = sum(is.na(x[ifirst:ilast]));
     c(ifirst=ifirst,ilast=ilast,nmid=nmid);
   })|>
@@ -20,13 +19,18 @@ checkdata<-function(.data, t2datestr, ignorecols=character(0)){
     dplyr::summarize(
   ifirst = max(ifirst,na.rm=TRUE),
   ilast = min(ilast,na.rm=TRUE))
-  if (ifirst>1 | ilast<nrow(.data)){
+  if (ibegend$ifirst>1 | ibegend$ilast<nrow(.data$y)){
     print(' ')
-    print(paste0('Truncating sample from: ', t2datestr(data.time[1]), '-', t2datestr(data.time[length(time)])))
-    print(paste0('         to new sample: ', t2datestr(data.time[ifirst]), '-', t2datestr(data.time[ilast])))
+    print(paste0('Truncating sample from: ', t2datestr(.data$time[1]), '-', t2datestr(.data$time[length(time)])))
+    print(paste0('         to new sample: ', t2datestr(.data$time[ibegend$ifirst]), '-', t2datestr(.data$time[ilast])))
   }else{
     print(' ')
     print('No need to truncate the sample')}
   
-  dataout =  .data[ifirst:ilast,];
+  dataout = .data
+  dataout$y=.data$y[ibegend$ifirst:ibegend$ilast,]
+  dataout$time=.data$time[ibegend$ifirst:ibegend$ilast]
+  dataout$w=.data$w[ibegend$ifirst:ibegend$ilast]
+  dataout$.data=.data$.data[ibegend$ifirst:ibegend$ilast,]
+  dataout
 }

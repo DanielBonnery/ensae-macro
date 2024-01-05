@@ -4,7 +4,8 @@ library(ggplot2)
 
 
 c("script/checdata.R",
-  "m2r/plot_y.r")|>sapply(source)->noprint
+  "m2r/plot_y.r")|>
+    sapply(source)->noprint
 spl = cbind(c(1984,2016),c(2,12));
 
 
@@ -34,10 +35,9 @@ mnames = c('ff4_hf','sp500_hf'); # US baseline
 ###########################################################################
 
 # PRIOR
-prior.lags = 12;
-prior.minnesota.tightness = .2;
-prior.minnesota.decay = 1;
-prior.Nm = length(mnames);
+prior=list(lags = 12,
+           minnesota=list(tightness = .2,decay = 1),
+           Nm = length(mnames));
 
 # create the output folder based on the calling filename
 path_out="path_out";path_out|>dir.create()
@@ -54,13 +54,14 @@ ymdif = function(x1,x2){(x2[1]-x1[1])*12+x2[2]-x1[2]};
 findym = function(x,t){which(abs(t-ym2t(x))<1e-6)}; # find [year month] in time vector t
 
 # Gibbs sampler settings
-gssettings.ndraws = 4000;
-gssettings.burnin = 4000;
-gssettings.saveevery = 4;
-gssettings.computemarglik = 0;
+gssettings=list(
+    ndraws = 4000,
+    burnin = 4000,
+    saveevery = 4,
+    computemarglik = 0)
 
 # detect poorman shocks and if yes override the identification to choleski
-if (!any(grepl(pattern = 'neg',mnames[1])) &!any(grepl(pattern = 'pos',mnames[2]))){
+if (any(grepl(pattern = 'neg',mnames[1])) &any(grepl(pattern = 'pos',mnames[2]))){
     idscheme = 'chol'}
 
 # nice names
@@ -70,7 +71,9 @@ mdict = c('eureon3m_'= 'surprise in 3m Eonia swaps',
               'sp500_'= 'surprise in S&P500',
               'pc1ff1_'= 'surprise in policy ind.',
               'usstocks1_'= 'surprise in 1pc of stocks');
-mnames_nice = mdict[mnames];
+mnames_nice = mdict[sapply(mnames,function(x){
+    a=unlist(sapply(names(mdict),grepl,x=x))
+    which(a)})];
 mylimits = matrix(NA,nrow=length(mnames),ncol=2);
 
 # define y
@@ -88,7 +91,7 @@ if (addvar!=''&!is.element(addvar,ynames)){
 # nice_names, yylimits, nonst
 dictfname = 'inst/extdata/ydict.csv';
 ydict<-read.csv(dictfname)
-ydict|>(`rownames<-`)(ydict[,1])
+rownames(ydict)<-ydict[,1]
 
 ynames_nice = ydict[ynames,2];#ynames_nice = ynames;
 yylimits = ydict[ynames,4:5];
@@ -96,28 +99,30 @@ nonst = ydict[ynames,3];
 
 # load data
 datafname = 'inst/extdata/data.csv';
-data.Nm = length(mnames);
-data.names = c(mnames, ynames);
-.data<-dat <- d <- read.csv(datafname); 
-tbeg = which(dat[[1]]==spl[1,1] & dat[[2]]==spl[1,2]); 
+.data=list()
+.data$Nm = length(mnames);
+.data$names = c(mnames, ynames);
+.data$dat <- read.csv(datafname); 
+tbeg = which(.data$dat[[1]]==spl[1,1] & .data$dat[[2]]==spl[1,2]); 
 if (length(tbeg)==0){ tbeg=1}
-tend = which(dat[[1]]==spl[2,1] & dat[[2]]==spl[2,2]); 
+tend = which(.data$dat[[1]]==spl[2,1] & .data$dat[[2]]==spl[2,2]); 
 if (length(tend)==0){ tend=1}
-ysel = intersect(data.names, names(d));
-.data = dat[tbeg:tend, ysel];
-.data$w = rep(1,nrow(.data));
-.data$time = seq(ym2t(dat[tbeg,1:2])[[1]], 
-                ym2t(dat[tend,1:2])[[1]], 
-                length.out=nrow(.data))
-rm( d,  tbeg, tend, ysel)
+ysel = intersect(.data$names, names(.data$dat));
+y=.data$dat[tbeg:tend, ysel]
+w = rep(1,tend-tbeg+1)
+time = seq(ym2t(.data$dat[tbeg,1:2])[[1]], 
+           ym2t(.data$dat[tend,1:2])[[1]], 
+           length.out=tend-tbeg+1)
+.data = c(.data,list(y=y,w=w,time=time,.data=cbind(y,data.frame(w=w,time=time))))
+
 
 # check ydata for missing values, determine the sample
 
 
 
 
-datatemp = .data
-#checkdata(.data, t2datestr, 1:data.Nm);
+ignorecols=mnames
+datatemp = checkdata(.data, t2datestr, ignorecols=ignorecols);
 idspl = paste0(t2datestr(datatemp$time[1]), 
                '-', 
                t2datestr(datatemp$time[length(datatemp$time)]));
@@ -126,29 +131,27 @@ idspl = paste0(t2datestr(datatemp$time[1]),
 fname = file.path(path_out,paste0(modname, '_', paste0(mnames,sep='_'), '_', idspl, '_', idscheme));
 #diary([fname '.txt'])
 #data = checkdata(data, t2datestr, 1:data.Nm); # again, for the diary
-plot_y(.data,whichplot = c(TRUE,TRUE))->plots;
+plot_y(.data$.data,whichplot = c(TRUE,TRUE))->plots;
 plots[[1]]
 plots[[2]]
 
 # print the correlation matrix of m
-.table = var(.data,use = "pairwise.complete.obs");
+.table = var(.data$y[mnames],use = "pairwise.complete.obs");
 corrtable=.table/(sqrt(c(diag(.table))%*%t(c(diag(.table)))))
 corrtable
 
 # complete the minnesota prior
-prior.minnesota.mvector = c(rep(0,data.Nm), nonst);
+prior$minnesota$mvector = c(rep(0,.data$Nm), nonst);
 
 # replace NaNs with zeros in the initial condition
-temp = .data[1:prior.lags,,]; 
-temp[is.an(temp)] <- 0; 
-.data[1:prior.lags,] <- temp; 
+.data$.data[1:prior$lags,][is.na(.data$.data[1:prior$lags,])] <- 0; 
 
 # drop the shocks before February 1994
 #id = data.time<ym2t([1994 2])-1e-6; .data(id,1:data.Nm) = NaN;
 
 # estimate the VAR
 #.data(isnan(.data)) = 0; res = VAR_dummyobsprior(.data,data.w,gssettings.ndraws,prior);
-res = VAR_withiid1kf(data, prior, gssettings);
+res = VAR_withiid1kf(.data, prior, gssettings);
 
 savedata([fname '_data.csv'], data, t2ym)
 ## identification
@@ -162,7 +165,7 @@ irfs_draws = NaN(N,N,MAlags,gssettings.ndraws);
 for i = 1:gssettings.ndraws
 betadraw = res.beta_draws(1:end-size(data.w,2),:,i);
 sigmadraw = res.sigma_draws(:,:,i);
-response = impulsdtrf(reshape(betadraw',N,N,prior.lags), chol(sigmadraw), MAlags);
+response = impulsdtrf(reshape(t(betadraw),N,N,prior$lags), chol(sigmadraw), MAlags);
             irfs_draws(:,:,:,i) = response;
         end
         ss = 1;
