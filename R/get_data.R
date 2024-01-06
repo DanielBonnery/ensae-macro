@@ -5,3 +5,9 @@ get_data<-function(){
 if(!dir.exists(tempdir())){dir.create(tempdir(),recursive = TRUE)}
 dest_file|>utils::unzip(exdir = tempdir())
 file.path(tempdir(),"data","data_var","data.csv")|>read.csv()}
+
+get_data_safe<-function(){
+  x<-try(get_data())
+  if(is.element("try-error",class(x))){
+    file.path("extdata","data.csv")|>read.csv()
+    }else{x}}

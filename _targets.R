@@ -10,7 +10,7 @@ list(
   #question 1. Generate X
   tar_target(
     name = raw_data,
-    command = get_data()),
+    command = get_data_safe()),
   #question 1. Generate X
   tar_target(variables_y,c("gs1" ,"logsp500","us_rgdp","us_gdpdef","ebpnew")),
   tar_target(variables_m,c("ff4_hf","sp500_hf")),
