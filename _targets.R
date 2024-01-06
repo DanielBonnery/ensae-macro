@@ -8,8 +8,13 @@ renv::dependencies("./R")$Package->required_packages
 required_packages|>writeLines("requirements.txt")
 setdiff(required_packages,installed.packages()[,"Package"])|>sapply(install.packages)
 
+
+#Load some libraries
+library(ggplot2)
+
 # Run the R scripts in the R/ folder with our custom functions:
 "R"|>list.files(full.names = TRUE)|>sapply(FUN = source)
+
 
 # Targets list:
 list(
