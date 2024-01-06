@@ -34,4 +34,4 @@ list(
   tar_target(starting_points,(function(mcmc_settings){})()),
   tar_target(mcmc_chains,NULL),
   #Outputs for the report
-  tar_target(the_plot_1,plot_1(data_ymt,"outputs/the_plot_1.png")))
+  tar_target(the_plot_1,plot_1(data_ymt,"outputs/the_plot_1.pdf")))
