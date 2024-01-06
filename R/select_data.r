@@ -12,5 +12,6 @@ select_data<-function(raw_data,variables_y,variables_m,variables_t,study_period)
     dplyr::mutate(yearmon=zoo::as.yearmon(paste0(year,"-",month)),
                   date=paste0(year,"-",month,"-01")|>as.Date("%Y-%m-%d"))|>
     dplyr::filter(yearmon>=study_period[1],
-                  yearmon<=study_period[2])
+                  yearmon<=study_period[2])|>
+    dplyr::mutate(weight=1)
 }

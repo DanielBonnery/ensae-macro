@@ -1,5 +1,9 @@
 downloader
 utils
+dplyr
+reshape2
 ggplot2
+dplyr
+plyr
 dplyr
 zoo

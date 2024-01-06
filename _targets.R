@@ -27,11 +27,19 @@ list(
   tar_target(study_period,zoo::as.yearmon(c("1984-02","2016-12"))),
   tar_target(name = data_ymt,command = select_data(raw_data,variables_y,variables_m,variables_t,study_period)),
   #Model fixed parameters
-  tar_target(p,12),
+  tar_target(empirical_hyper,
+             empirical_hyper_f(
+               data_ymt,
+               variables_y,
+               variables_m,
+               p=12,
+               lambda_1=5,
+               lambda_2=1)),
   #Model draw values for mcm chain
   tar_target(mcmc_settings,list(nchains=4,chains_size=1000,burning=4)),
   #Model draw values for mcm chain
   tar_target(starting_points,(function(mcmc_settings){})()),
   tar_target(mcmc_chains,NULL),
   #Outputs for the report
+  tar_target(the_plot_0,plot_0(data_ymt,"outputs/the_plot_0.png")),
   tar_target(the_plot_1,plot_1(data_ymt,"outputs/the_plot_1.pdf")))
