@@ -2,7 +2,8 @@
 #' 
 #' 
 
-mcmc_valeurs_initiales<-function(data_ymt){
+mcmc_valeurs_initiales<-
+  function(data_ymt,P=12){
   
   
   
