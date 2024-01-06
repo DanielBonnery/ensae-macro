@@ -22,6 +22,7 @@ list(
   tar_target(name = raw_data,command = get_data_safe()),
   #select data
   tar_target(variables_y,c("gs1" ,"logsp500","us_rgdp","us_gdpdef","ebpnew")),
+  tar_target(variables_y_non_st,c("logsp500","us_rgdp","us_gdpdef")),
   tar_target(variables_m,c("ff4_hf","sp500_hf")),
   tar_target(variables_t,c("year","month")),
   tar_target(study_period,zoo::as.yearmon(c("1984-02","2016-12"))),
@@ -33,9 +34,9 @@ list(
   tar_target(exog_std,100000),
   tar_target(empirical_hyper,
              empirical_hyper_f(
-               data_ymt,
-               variables_y,
-               variables_m,
+               data_ymt=data_ymt,
+               variables_m=variables_m,
+               variables_y=variables_y,
                p=p,
                tightness=tightness,
                decay=decay,

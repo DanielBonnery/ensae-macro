@@ -1,9 +1,11 @@
+zoo
 downloader
 utils
 dplyr
-reshape2
-ggplot2
+zoo
 dplyr
+matlab
 plyr
 dplyr
-zoo
+reshape2
+ggplot2

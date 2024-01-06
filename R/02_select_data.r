@@ -5,8 +5,8 @@
 #'variables_m=c("ff4_hf","sp500_hf")
 #'variables_t=c("year","month")
 #'study_period=zoo::as.yearmon(c("1984-02","2016-12"))
-#'data_ymt= select_data(raw_data,variables_y,variables_m,variables_time,data_range)
-select_data<-function(raw_data,variables_y,variables_m,variables_t,study_period){
+#'data_ymt= select_data(raw_data,variables_m,variables_y,variables_time,data_range)
+select_data<-function(raw_data,variables_m,variables_y,variables_t,study_period){
   raw_data|>
     dplyr::select(one_of(c(variables_t,variables_m,variables_y)))|>
     dplyr::mutate(yearmon=zoo::as.yearmon(paste0(year,"-",month)),

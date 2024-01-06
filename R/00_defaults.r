@@ -1,5 +1,6 @@
 variables_y_default=c("gs1" ,"logsp500","us_rgdp","us_gdpdef","ebpnew")
 variables_m_default=c("ff4_hf","sp500_hf")
+variables_y_non_st_default=c("logsp500","us_rgdp","us_gdpdef")
 variables_t_default=c("year","month")
 study_period_default=zoo::as.yearmon(c("1984-02","2016-12"))
 p_default=12
