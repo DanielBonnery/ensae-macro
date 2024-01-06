@@ -9,7 +9,7 @@ c("script/checdata.R",
 spl = cbind(c(1984,2016),c(2,12));
 
 
-#spl = cbind(c(1984,2008),c(2,12));# Dec2008 ZLB reached
+#spl = nd(c(1984,2008),c(2,12));# Dec2008 ZLB reached
 #spl = cbind(c(1990,2016),c(2,12));# Feb1999 surprises start
 #spl = cbind(c(1979,2016),c(7,12));# GertlerKaradi2015 sample 
 
@@ -103,9 +103,9 @@ datafname = 'inst/extdata/data.csv';
 .data$Nm = length(mnames);
 .data$names = c(mnames, ynames);
 .data$dat <- read.csv(datafname); 
-tbeg = which(.data$dat[[1]]==spl[1,1] & .data$dat[[2]]==spl[1,2]); 
+tbeg = which(.data$dat$year==spl[1,1] & .data$dat$month==spl[1,2]); 
 if (length(tbeg)==0){ tbeg=1}
-tend = which(.data$dat[[1]]==spl[2,1] & .data$dat[[2]]==spl[2,2]); 
+tend = which(.data$dat$year==spl[2,1] & .data$dat$month==spl[2,2]); 
 if (length(tend)==0){ tend=1}
 ysel = intersect(.data$names, names(.data$dat));
 y=.data$dat[tbeg:tend, ysel]
