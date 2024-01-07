@@ -2,18 +2,14 @@
 #git
 #R >=4.1.1
 #connection to internet
-
 # Clone the github reporistory
 system("git clone https://github.com/DanielBonnery/ensae-macro.git")
-
 # Change working directory
-setwd("ensae-macro")
-
-# Install packages targets and renv
-if(!is.element("targets",installed.packages()[,"Package"])){install.packages("targets")}
-if(!is.element("renv",installed.packages()[,"Package"])){install.packages("renv")}
-
-
+setwd("ensae-macro")->norprint
+# Install packages targets and renv if not already installed
+c("targets","renv")|>
+  setdiff(installed.packages()[,"Package"])|>
+  sapply(install.packages)->norprint
 # load package targets
 library(targets)
 # run the code:

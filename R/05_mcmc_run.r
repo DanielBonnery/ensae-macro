@@ -8,7 +8,7 @@ mcmc_observations<-function(data_ymt,p){
 
 
 mcmc_run<-function(data_ymt,variables_m,variables_y,p,hyper_parameter,initial_condition_generator){
-  
+  if(FALSE){
   attach(empirical_hyper)
   mcmc_initial_values<-mcmc_initial_values_f(data_ymt,variables_m,variables_y,empirical_hyper)
   
@@ -33,5 +33,6 @@ mcmc_run<-function(data_ymt,variables_m,variables_y,p,hyper_parameter,initial_co
   beta1.1<-jags.dugong$BUGSoutput$sims.list$beta1
   
   
-  
+  }
+  NULL
 }

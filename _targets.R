@@ -42,10 +42,28 @@ list(
                decay=decay,
                exog_std=exog_std)),
   #Model draw values for mcm chain
-  tar_target(mcmc_settings,list(nchains=4,chains_size=1000,burning=4)),
+  tar_target(mcmc_settings,list(nchains=0,chains_size=4000,burning=1000,thining=4)),
   #Model draw values for mcm chain
   tar_target(starting_points,(function(mcmc_settings){})()),
-  tar_target(mcmc_chains,NULL),
+  tar_target(mcmc_chains,
+             mcmc_run(data_ymt=data_ymt,
+                      variables_m=variables_m,
+                      variables_y=variables_y,
+                      p=p,
+                      hyper_parameter=hyper_parameter,
+                      initial_condition_generator=initial_condition_generator)),
+  tar_target(irfs_draws,
+             draw_irfs(mcmc_chains=mcmc_chains,variables_m=variables_m,variables_y=variables_y)),
   #Outputs for the report
-  tar_target(the_plot_0,plot_0(data_ymt,"outputs/the_plot_0.png")),
-  tar_target(the_plot_1,plot_1(data_ymt,"outputs/the_plot_1.pdf")))
+  tar_target(the_plot_0,plot_0(data_ymt,variables_m,variables_y,raw_data$dictionnary,,"outputs/the_plot_0.png")),
+  tar_target(the_plot_00,plot_00(data_ymt,variables_m,variables_y,
+                                 raw_data$dictionnary,
+                                 path_out="outputs/the_plot_00.pdf")),
+  tar_target(the_plot_1,plot_1(data_ymt,"outputs/the_plot_1.pdf")),
+tar_target(the_plot_irfs,
+           plot_irfs_draws(
+             variables_m=variables_m,
+             variables_y=variables_y,
+             irfs_draws=irfs_draws,
+             dictionnary=raw_data$dictionnary,
+             path_out="outputs/the_plot_irfs.png")))
