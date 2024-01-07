@@ -4,10 +4,13 @@ get_data<-function(){
   downloader::download(dest_file)
 if(!dir.exists(tempdir())){dir.create(tempdir(),recursive = TRUE)}
 dest_file|>utils::unzip(exdir = tempdir())
-file.path(tempdir(),"data","data_var","data.csv")|>read.csv()}
+list(dataset=file.path(tempdir(),"data","data_var","data.csv")|>read.csv(),
+     dictionnary=file.path(tempdir(),"data","data_var","ydict.csv")|>read.csv())}
 
 get_data_safe<-function(){
   x<-try(get_data())
   if(is.element("try-error",class(x))){
-    file.path("extdata","data.csv")|>read.csv()
+    list(dataset=file.path("extdata","data.csv")|>read.csv(),
+         dictionnary=file.path("extdata","ydict.csv")|>read.csv())
+         
     }else{x}}

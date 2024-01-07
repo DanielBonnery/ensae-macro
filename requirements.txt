@@ -6,6 +6,7 @@ zoo
 dplyr
 matlab
 plyr
+rjags
 dplyr
 reshape2
 ggplot2
