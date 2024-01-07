@@ -29,5 +29,16 @@ system("git clone https://github.com/DanielBonnery/ensae-macro.git")
 - run:
 
 ```{r,eval=FALSE}
-source(demo/main.R)
+tar_make()
 ```
+
+## What it does
+
+### Save intermediary objects
+
+The program creates a "_targets" folder with intermediary objects
+
+### Create plots
+
+The program creates an "outputs" folder and all the  plots displayed  in the report and save them in the  "outputs" folder
+

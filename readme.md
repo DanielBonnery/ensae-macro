@@ -7,7 +7,7 @@ Jan 12, 2024
 
 ### Install the following packages:
 
-downloader, utils
+downloader, dplyr, ggplot2, matlab, plyr, reshape2, rjags, utils, zoo
 
 ### Copy and execute the project:
 
@@ -21,5 +21,16 @@ system("git clone https://github.com/DanielBonnery/ensae-macro.git")
 -   run:
 
 ``` r
-source(demo/main.R)
+tar_make()
 ```
+
+## What it does
+
+### Save intermediary objects
+
+The program creates a "\_targets" folder with intermediary objects
+
+### Create plots
+
+The program creates an “outputs” folder and all the plots displayed in
+the report and save them in the “outputs” folder
