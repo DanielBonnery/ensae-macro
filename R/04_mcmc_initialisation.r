@@ -1,4 +1,14 @@
 
+#'@examples
+#'  data_ym_mat=data_ymt[c(variables_m,variables_y)]|>as.matrix()
+#'  mismat=data_ym_mat|>is.na()
+#'  missingpositions=cbind(row(mismat)[c(mismat)],col(mismat)[c(mismat)])
+#'  nmis=sum(mismat)
+#'  mymis=rep(0,nmis)
+#'  list(b=b,sigma=sigma,ymis=rep(0,nmis),missingpositions=missingpositions)}))
+
+
+
 mcmc_initial_values_f<-
   function(data_ymt,variables_m,variables_y,empirical_hyper){
     with( empirical_hyper,
@@ -9,7 +19,6 @@ mcmc_initial_values_f<-
       1e-2*t(chol(qinv_bar_under))%*%rnorm( K* Ny,1), K, Ny))
       
     sigma = s_bar_under/(v_bar_under - N - 1);
-    mismat=data_ymt[c(variables_m,variables_y)]|>as.matrix()|>is.na()
-    missingpositions=cbind(row(mismat)[c(mismat)],col(mismat)[c(mismat)])
-    list(b=b,sigma=sigma,missingpositions=missingpositions)}))
+    nmis=data_ymt[c(variables_m,variables_y)]|>as.matrix()|>is.na()|>sum()
+    list(b=b,sigma=sigma,mymis=rep(0,nmis))}))
   }

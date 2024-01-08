@@ -5,8 +5,8 @@
 #'mcmc_chain=get_mcmc(variables_m = variables_m,variables_y = variables_y)
 #'N=7
 #'p=12
-#'B=mcmc_chain$beta_draws[1:(N*p),,i]|>t()|>array(c(N,N,p))
-#'cholsigma=chol(mcmc_chain$sigma_draws[,,i])
+#'B=mcmc_chain$b_sample[1:(N*p),,i]|>t()|>array(c(N,N,p))
+#'cholsigma=chol(mcmc_chain$sigma_sample[,,i])
 #'nstep=30
 
 impulsdtrf <- function(B,cholsigma,nstep){
@@ -38,7 +38,7 @@ test_restr<-function(i_mon=1,i_news=2,irfs){
 #'max_attempts=1000
 
 draw_irfs<-function(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts){
-  dd<- dim(mcmc_chain$beta_draws)
+  dd<- dim(mcmc_chain$b_sample)
   N=dd[2]
   ndraws=dd[3]     
   
@@ -46,15 +46,15 @@ draw_irfs<-function(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts){
   i_news=grep( "sp500_hf",c(variables_m,variables_y))
   #'@examples
   #'i=1
-  irfs_draws<-plyr::aaply(
+  irfs_sample<-plyr::aaply(
     1:ndraws,
     .margins = 1,
     .progress="text",
     .fun=function(i){
-      irfs_draw<-array(NA,c(N,N,nstep))
+      irfs<-array(NA,c(N,N,nstep))
       
-      irfchol <- impulsdtrf(B=(mcmc_chain$beta_draws[,,i][1:(N*p),])|>t()|>array(c(N,N,p)),
-                            cholsigma=chol(mcmc_chain$sigma_draws[,,i]),
+      irfchol <- impulsdtrf(B=(mcmc_chain$b_sample[,,i][1:(N*p),])|>t()|>array(c(N,N,p)),
+                            cholsigma=chol(mcmc_chain$sigma_sample[,,i]),
                             nstep=nstep)
       
       # apply the sign restrictions
@@ -73,17 +73,17 @@ draw_irfs<-function(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts){
             candidate[2,i_mon,1] < 0 & 
             candidate[1,i_news,1] > 0 &
             candidate[2,i_news,1] > 0){
-          irfs_draw <- candidate
+          irfs <- candidate
           notfound=FALSE}
         a=a+1
       }
-      irfs_draw
+      irfs
     })|>aperm(c(2:4,1))
   
   variables_my=c(variables_m,variables_y)
-  dimnames(irfs_draws)<-list(on=variables_my,
+  dimnames(irfs_samples)<-list(on=variables_my,
                              shock_of=variables_my,
-                             time=0:(dim(irfs_draws)-1)[3],NULL)
-  names(dimnames(irfs_draws))[1:3]<-c("on","shock_of","time")
-  irfs_draws
+                             time=0:(dim(irfs_samples)-1)[3],NULL)
+  names(dimnames(irfs_samples))[1:3]<-c("on","shock_of","time")
+  irfs_samples
   }

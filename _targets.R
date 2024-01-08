@@ -42,17 +42,15 @@ list(
                decay=decay,
                exog_std=exog_std)),
   #Settings for mcm chain
-  tar_target(mcmc_settings,list(nchains=0,chains_size=4000,burning=1000,thining=4)),
-  #Model draw values for mcm chain
-  tar_target(starting_points,(function(mcmc_settings){})()),
+  tar_target(mcmc_settings,list(nchains=0,chains_size=40,burning=10,thining=4)),
+  #Gibbs sampler draw b and sigma
   tar_target(mcmc_chain,
-             mcmc_runs(data_ymt=data_ymt,
+             mcmc_run(data_ymt=data_ymt,
                       variables_m=variables_m,
                       variables_y=variables_y,
                       p=p,
-                      hyper_parameter=hyper_parameter,
-                      mcmc_settings=mcmc_settings,
-                      starting_points=starting_points)),
+                      empirical_hyper=empirical_hyper,
+                      mcmc_settings=mcmc_settings)),
   #Settings for irfs (number of steps, max attempts) and computation
   tar_target(nstep,36),
   tar_target(max_attempts,1000),

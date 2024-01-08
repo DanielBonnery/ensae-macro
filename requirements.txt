@@ -6,7 +6,8 @@ zoo
 dplyr
 matlab
 plyr
-rjags
+abind
+dplyr
 einsum
 plyr
 dplyr

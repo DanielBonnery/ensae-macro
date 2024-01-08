@@ -18,10 +18,10 @@ varlags_vec <- function(y,p,colname=NULL){
 #'y=data_ymt$ff4_hf
 #' p=p_default
 #' varlags_vec(y,p)
-varlags_mat <- function(data_ymt,p,variables_m,variables_y){
+varlags_mat <- function(data_ymt_mat,p,variables_m,variables_y){
 
   plyr::alply(c(variables_m,variables_y),1,function(y){
-    varlags_vec(data_ymt[[y]],p=p,colname=y)})|>
+    varlags_vec(data_ymt_mat[,y],p=p,colname=y)})|>
   do.call(what=cbind)
   }
 
