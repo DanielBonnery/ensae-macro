@@ -3,10 +3,9 @@ impute<-function(data_ym_mat,missingpositions,mymis){
   data_ym_mat
 }
 
-
-
 mcmc_observations_f<-function(data_ymt,p,variables_m,variables_y){
   data_ym_mat=data_ymt|>dplyr::arrange(date)|>(`[`)(c(variables_m,variables_y))|>as.matrix()
+  data_ym_mat[1:p,][is.na(data_ym_mat[1:p,])]<-0
   mismat=data_ym_mat|>is.na()
   missingpositions=cbind(row(mismat)[c(mismat)],col(mismat)[c(mismat)])
  list(data_ym_mat=data_ym_mat,missingpositions=missingpositions) 

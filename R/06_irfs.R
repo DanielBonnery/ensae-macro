@@ -37,7 +37,7 @@ test_restr<-function(i_mon=1,i_news=2,irfs){
 #'nstep=36
 #'max_attempts=1000
 
-draw_irfs<-function(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts){
+sample_irfs<-function(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts){
   dd<- dim(mcmc_chain$b_sample)
   N=dd[2]
   ndraws=dd[3]     
@@ -85,5 +85,5 @@ draw_irfs<-function(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts){
                              shock_of=variables_my,
                              time=0:(dim(irfs_samples)-1)[3],NULL)
   names(dimnames(irfs_samples))[1:3]<-c("on","shock_of","time")
-  irfs_samples
+  irfs_sample
   }

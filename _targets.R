@@ -54,8 +54,8 @@ list(
   #Settings for irfs (number of steps, max attempts) and computation
   tar_target(nstep,36),
   tar_target(max_attempts,1000),
-  tar_target(irfs_draws,
-             draw_irfs(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts)),
+  tar_target(irfs_sample,
+             sample_irfs(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts)),
   #Outputs for the report
   tar_target(the_plot_0,plot_0(data_ymt,variables_m,variables_y,raw_data$dictionnary,"outputs/the_plot_0.png")),
   tar_target(the_plot_00,plot_00(data_ymt,variables_m,variables_y,
