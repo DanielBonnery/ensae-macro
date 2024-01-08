@@ -41,21 +41,25 @@ list(
                tightness=tightness,
                decay=decay,
                exog_std=exog_std)),
-  #Model draw values for mcm chain
+  #Settings for mcm chain
   tar_target(mcmc_settings,list(nchains=0,chains_size=4000,burning=1000,thining=4)),
   #Model draw values for mcm chain
   tar_target(starting_points,(function(mcmc_settings){})()),
-  tar_target(mcmc_chains,
-             mcmc_run(data_ymt=data_ymt,
+  tar_target(mcmc_chain,
+             mcmc_runs(data_ymt=data_ymt,
                       variables_m=variables_m,
                       variables_y=variables_y,
                       p=p,
                       hyper_parameter=hyper_parameter,
+                      mcmc_settings=mcmc_settings,
                       initial_condition_generator=initial_condition_generator)),
+  #Settings for irfs (number of steps, max attempts) and computation
+  tar_target(nstep,36),
+  tar_target(max_attempts,1000),
   tar_target(irfs_draws,
-             draw_irfs(mcmc_chains=mcmc_chains,variables_m=variables_m,variables_y=variables_y)),
+             draw_irfs(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts)),
   #Outputs for the report
-  tar_target(the_plot_0,plot_0(data_ymt,variables_m,variables_y,raw_data$dictionnary,,"outputs/the_plot_0.png")),
+  tar_target(the_plot_0,plot_0(data_ymt,variables_m,variables_y,raw_data$dictionnary,"outputs/the_plot_0.png")),
   tar_target(the_plot_00,plot_00(data_ymt,variables_m,variables_y,
                                  raw_data$dictionnary,
                                  path_out="outputs/the_plot_00.pdf")),

@@ -29,6 +29,7 @@ system("git clone https://github.com/DanielBonnery/ensae-macro.git")
 - run:
 
 ```{r,eval=FALSE}
+library(targets)
 tar_make()
 ```
 
