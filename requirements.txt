@@ -6,6 +6,7 @@ zoo
 dplyr
 matlab
 plyr
+pracma
 abind
 dplyr
 einsum
