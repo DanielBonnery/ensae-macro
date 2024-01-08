@@ -83,7 +83,7 @@ sample_irfs<-function(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts){
   variables_my=c(variables_m,variables_y)
   dimnames(irfs_sample)<-list(on=variables_my,
                              shock_of=variables_my,
-                             time=0:(dim(irfs_samples)-1)[3],NULL)
+                             time=0:(dim(irfs_sample)-1)[3],NULL)
   names(dimnames(irfs_sample))[1:3]<-c("on","shock_of","time")
   irfs_sample
   }
