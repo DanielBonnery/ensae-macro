@@ -63,16 +63,16 @@ list(
                                  path_out="outputs/the_plot_00.pdf")),
   tar_target(the_plot_1,plot_1(data_ymt,"outputs/the_plot_1.pdf")),
 tar_target(the_plot_irfs,
-           plot_irfs_draws(
+           plot_irfs_sample(
              variables_m=variables_m,
              variables_y=variables_y,
-             irfs_draws=irfs_draws,
+             irfs_sample=irfs_sample,
              dictionnary=raw_data$dictionnary,
              path_out="outputs/the_plot_irfs.pdf")),
 tar_target(the_plot_irfs2,
-           plot_irfs_draws2(
+           plot_irfs_sample2(
              variables_m=variables_m,
              variables_y=variables_y,
-             irfs_draws=irfs_draws,
+             irfs_sample=irfs_sample,
              dictionnary=raw_data$dictionnary,
              path_out="outputs/the_plot_irfs2.pdf")))

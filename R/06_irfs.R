@@ -81,9 +81,9 @@ sample_irfs<-function(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts){
     })|>aperm(c(2:4,1))
   
   variables_my=c(variables_m,variables_y)
-  dimnames(irfs_samples)<-list(on=variables_my,
+  dimnames(irfs_sample)<-list(on=variables_my,
                              shock_of=variables_my,
                              time=0:(dim(irfs_samples)-1)[3],NULL)
-  names(dimnames(irfs_samples))[1:3]<-c("on","shock_of","time")
+  names(dimnames(irfs_sample))[1:3]<-c("on","shock_of","time")
   irfs_sample
   }

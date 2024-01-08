@@ -1,15 +1,15 @@
-#hh = plot_irfs_draws(irfs_draws, data.Nm+1:min(N,data.Nm+ny1), ss, varnames_nice, varnames, shocknames_nice, idscheme, qtoplot, [0 0 1], '', ylimits, transf); align_Ylabels(hh); saveTightFigure(hh,[fname '_irfy1'],'pdf')
+#hh = plot_irfs_sample(irfs_sample, data.Nm+1:min(N,data.Nm+ny1), ss, varnames_nice, varnames, shocknames_nice, idscheme, qtoplot, [0 0 1], '', ylimits, transf); align_Ylabels(hh); saveTightFigure(hh,[fname '_irfy1'],'pdf')
 #'@examples
 #'tar_load(raw_data)
 #'dictionnary=raw_data$dictionnary
-plot_irfs_draws <- function(
+plot_irfs_sample <- function(
     variables_m,
     variables_y,
-    irfs_draws,
+    irfs_sample,
     dictionnary,
     path_out="outputs/the_plot_irfs.pdf"){
     variables_my<-c(variables_m,variables_y)
-    irfs_draws|>
+    irfs_sample|>
         plyr::aaply(1:3,
                     quantile,
                     c(.05,.16,.5,.84,.95))->qq
@@ -71,14 +71,14 @@ plot_irfs_draws <- function(
 
 
 
-plot_irfs_draws2 <- function(
+plot_irfs_sample2 <- function(
     variables_m,
     variables_y,
-    irfs_draws,
+    irfs_sample,
     dictionnary,
     path_out="outputs/the_plot_irfs.pdf"){
     variables_my<-c(variables_m,variables_y)
-    irfs_draws|>reshape2::melt()->dtf
+    irfs_sample|>reshape2::melt()->dtf
     
     my_labels<-dictionnary$nice_name|>setNames(dictionnary$name)|>(`[`)(variables_y)|>
         c("ff4_hf"="Surprise in \n the  3-month \n fed funds \n rate ",
