@@ -70,4 +70,11 @@ tar_target(the_plot_irfs,
              variables_y=variables_y,
              irfs_draws=irfs_draws,
              dictionnary=raw_data$dictionnary,
-             path_out="outputs/the_plot_irfs.pdf")))
+             path_out="outputs/the_plot_irfs.pdf")),
+tar_target(the_plot_irfs2,
+           plot_irfs_draws2(
+             variables_m=variables_m,
+             variables_y=variables_y,
+             irfs_draws=irfs_draws,
+             dictionnary=raw_data$dictionnary,
+             path_out="outputs/the_plot_irfs2.pdf")))

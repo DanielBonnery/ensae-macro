@@ -65,3 +65,49 @@ plot_irfs_draws <- function(
     
     
 }
+
+
+
+
+
+
+plot_irfs_draws2 <- function(
+    variables_m,
+    variables_y,
+    irfs_draws,
+    dictionnary,
+    path_out="outputs/the_plot_irfs.pdf"){
+    variables_my<-c(variables_m,variables_y)
+    irfs_draws|>reshape2::melt()->dtf
+    
+    my_labels<-dictionnary$nice_name|>setNames(dictionnary$name)|>(`[`)(variables_y)|>
+        c("ff4_hf"="Surprise in \n the  3-month \n fed funds \n rate ",
+          "sp500_hf"="Surprise in \n the \n S&P 500")|>
+        gsub(pattern="\\newline",replacement="\n",fixed=TRUE)|>
+        (`[`)(variables_my)
+    
+    dtf|>
+        dplyr::filter(is.element(shock_of,c("ff4_hf","sp500_hf")))|>
+        dplyr::mutate(shock_of2=
+                          c("ff4_hf"="Monetary policy\n(negative co-movement)",
+                            "sp500_hf"="CB information\n(positive co-movement)")[shock_of],
+                      on2=my_labels[on]|>ordered(levels=my_labels))->dtf
+    
+    
+    
+    
+    theplot<-
+        dtf    |>
+        dplyr::filter(Var4>3000)|>
+        ggplot2::ggplot(aes(x=time,y=value,group=interaction(shock_of,on,Var4)))+
+        geom_line(size=.1,alpha=.1,colour="orange")+
+        geom_hline(yintercept=0,size=.2)+
+        facet_grid(on2~shock_of2,scales = "free_y")+
+        xlab("Months")+ylab("")+
+        theme_bw()+
+        theme(legend.position = "bottom")
+    theplot|>
+        ggsave(filename=path_out,width = 19,height=25,units = "cm")
+    
+    
+}
