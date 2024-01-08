@@ -80,6 +80,7 @@ draw_irfs<-function(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts){
       irfs_draw
     })|>aperm(c(2:4,1))
   
+  variables_my=c(variables_m,variables_y)
   dimnames(irfs_draws)<-list(on=variables_my,
                              shock_of=variables_my,
                              time=0:(dim(irfs_draws)-1)[3],NULL)
