@@ -144,7 +144,6 @@ empirical_hyper_f<-
     s_bar_under<-s_bar_under_f(sigma_i)
 
     list(p=p,
-         v_bar_under=length(variables_y)+2,
          sigma_i=sigma_i,
          decay=decay,
          tightness=tightness,

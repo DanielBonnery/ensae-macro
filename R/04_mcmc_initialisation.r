@@ -22,3 +22,4 @@ mcmc_initial_values_f<-
     nmis=data_ymt[c(variables_m,variables_y)]|>as.matrix()|>is.na()|>sum()
     list(b=b,sigma=sigma,mymis=rep(0,nmis))}))
   }
+
