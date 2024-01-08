@@ -52,7 +52,7 @@ list(
                       p=p,
                       hyper_parameter=hyper_parameter,
                       mcmc_settings=mcmc_settings,
-                      initial_condition_generator=initial_condition_generator)),
+                      starting_points=starting_points)),
   #Settings for irfs (number of steps, max attempts) and computation
   tar_target(nstep,36),
   tar_target(max_attempts,1000),
