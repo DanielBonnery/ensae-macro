@@ -15,12 +15,13 @@ sample_mymis_0<-function(yy, dd, ZZ, WW, cc, TT, RR, a1, C1){
   
   yplus = matrix(NA,nobs,TTT);
   aplus = matrix(NA,nstates,TTT+1);
-  aplus[,1] = C1%*%rnorm(dim(C1)[2],1); # draw the first state with a1=0
+  aplus[,1] = C1%*%rnorm(dim(C1)[2]); # draw the first state with a1=0
   #'@examples 
   #'tt=1
   for (tt in 1:TTT){
-    yplus[,tt] = ZZ%*%aplus[,tt] + WW%*%rnorm(nobsshocks,1);
-    aplus[,tt+1] = TT%*%aplus[,tt] + RR%*%rnorm(nstatesshocks,1);}
+    yplus[,tt] = ZZ%*%aplus[,tt] + WW%*%rnorm(nobsshocks,mean = 0,sd = 1);
+    aplus[,tt+1] = TT%*%aplus[,tt] + RR%*%rnorm(nstatesshocks,mean = 0,sd = 1);}
+  
   aplus<-aplus[,-nrow(aplus)];
   yyyy = yy - yplus;
   # allocate space
@@ -98,7 +99,7 @@ sample_mymis_0<-function(yy, dd, ZZ, WW, cc, TT, RR, a1, C1){
   
   aaa = aaa + aplus;
   
-  t(aaa[1:N,])
+  t(aaa[1:N,]);0
 }
   
 
@@ -126,7 +127,7 @@ sample_mymis<-function(sigma,b,mcmc_observations,empirical_hyper){
   
   cc = matrix(0,N*p,1); 
   cc[1:N,1] = t(b[nrow(b),]);
-  TT = rbind(t(b[1:(nrow(b)-1),]),
+  TT = rbind(t(b[-nrow(b),]),
              cbind(diag(N*(p-1)),
                    matrix(0,N*(p-1),N)));
   RR = rbind(t(chol(sigma)),

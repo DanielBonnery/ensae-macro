@@ -34,7 +34,7 @@ mcmc_run<-function(data_ymt,variables_m,variables_y,p,empirical_hyper,mcmc_setti
     my_mat_i<-varlags_mat(data_ymt_mat=data_ym_mat_i,
                           variables_m = variables_m,
                           variables_y = variables_y,p=p)
-    sigma<-sample_sigma(b,y,mcmc_observations,empirical_hyper)
+    sigma<-sample_sigma(b,my_mat_i,mcmc_observations,empirical_hyper)
     b<-sample_b(sigma,my,mcmc_observations,empirical_hyper)
     if (i>mcmc_settings$burning& i%%mcmc_settings$thining==0){
       sigma_sample= abind::abind(sigma_sample,sigma,along=3)

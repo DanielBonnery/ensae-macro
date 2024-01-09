@@ -15,8 +15,8 @@ mcmc_initial_values_f<-
           ({
     b = cbind(
       matrix(0,K,Nm),
-      matrix(c(b_bar_under) + 
-      1e-2*t(chol(qinv_bar_under))%*%rnorm( K* Ny,1), K, Ny))
+      matrix(c(b_bar_under) + 1e-2*t(chol(qinv_bar_under))%*%rnorm( K* Ny), 
+             K, Ny))
       
     sigma = s_bar_under/(v_bar_under - N - 1);
     nmis=data_ymt[c(variables_m,variables_y)]|>as.matrix()|>is.na()|>sum()

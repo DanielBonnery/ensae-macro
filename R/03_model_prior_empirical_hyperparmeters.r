@@ -6,23 +6,24 @@
 #' varlags_vec(y,p,"toto")
 varlags_vec <- function(y,p,colname=NULL){
   nn=length(y)
-  x<-plyr::aaply(0:p,1,function(pp){
+  x<-plyr::aaply(1:p,1,function(pp){
     y[(p+1-pp):(nn-pp)]
   })|>t()
-  if(is.null(colname)){x}else{x|>(`colnames<-`)(paste0(colname,0:p))}
+  if(is.null(colname)){x}else{x|>(`colnames<-`)(paste0(colname,1:p))}
 }
 
 #'@examples
 #'tar_load(data_ymt)
-#'mat=as.matrix(data_ymt)
-#'y=data_ymt$ff4_hf
+#'data_ymt_mat=as.matrix(data_ymt)
 #' p=p_default
-#' varlags_vec(y,p)
+#' varlags_mat(data_ymt_mat,p,variables_m,variables_y)|>dim()
 varlags_mat <- function(data_ymt_mat,p,variables_m,variables_y){
 
-  plyr::alply(c(variables_m,variables_y),1,function(y){
+  x<-plyr::alply(c(variables_m,variables_y),1,function(y){
     varlags_vec(data_ymt_mat[,y],p=p,colname=y)})|>
   do.call(what=cbind)
+  y=data_ymt_mat[-(1:p),]
+  list(x=x,y=y)
   }
 
 
