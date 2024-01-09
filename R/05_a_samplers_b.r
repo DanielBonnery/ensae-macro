@@ -10,6 +10,6 @@ sample_b<-function(sigma,my_mat_i,empirical_hyper){
     a = qinvb_bar_under + t(x)%*%yst%*%SigmaYY1inv;
     C = chol(A);
     B = proj(C, proj(t(C),c(a) + rnorm(K*Ny))); 
-    BB = [zeros(K,Nm) reshape(B, K, Ny)];})
+    BB = cbind(matrix(0,K,Nm) matrix(B, K, Ny));})
   
 }
