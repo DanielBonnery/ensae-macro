@@ -35,17 +35,20 @@ mcmc_run<-function(data_ymt,variables_m,variables_y,p,empirical_hyper,mcmc_setti
                           variables_m = variables_m,
                           variables_y = variables_y,p=p)
     sigma<-sample_sigma(b,my_mat_i,mcmc_observations,empirical_hyper)
-    b<-sample_b(sigma,my,mcmc_observations,empirical_hyper)
+    try(b<-sample_b(sigma = sigma,my_mat_i = my_mat_i,
+                    empirical_hyper = empirical_hyper),silent = TRUE)
     if (i>mcmc_settings$burning& i%%mcmc_settings$thining==0){
       sigma_sample= abind::abind(sigma_sample,sigma,along=3)
       b_sample= abind::abind(b_sample,b,along=3)}
     setTxtProgressBar(pb,i)
   }
   close(pb)
-  list(b_sample=b_sample,
+  mcmc_chain=list(b_sample=b_sample,
        sigma_sample=sigma_sample)
+  #Save result
+  "outputs/mcmc_chain.rda"|>load()
+  mcmc_chain
 }
 
 #'To save time, just load already computed
-mcmc_run=function(data_ymt,variables_m,variables_y,p,empirical_hyper,mcmc_settings){
-  "outputs/mcmc_chain.rda"|>load()|>get()}
+#mcmc_run=function(data_ymt,variables_m,variables_y,p,empirical_hyper,mcmc_settings){"outputs/mcmc_chain.rda"|>load()|>get()}
