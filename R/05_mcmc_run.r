@@ -13,6 +13,7 @@ mcmc_observations_f<-function(data_ymt,p,variables_m,variables_y){
 
 
 mcmc_run<-function(data_ymt,variables_m,variables_y,p,empirical_hyper,mcmc_settings){
+  set.seed(1)
   empirical_hyper|>attach()|>suppressMessages()
   mcmc_initial_values_f(data_ymt,variables_m,variables_y,empirical_hyper)|>attach()|>suppressMessages()
   mcmc_observations<-mcmc_observations_f(data_ymt,p,variables_m,variables_y)
@@ -46,7 +47,7 @@ mcmc_run<-function(data_ymt,variables_m,variables_y,p,empirical_hyper,mcmc_setti
   mcmc_chain=list(b_sample=b_sample,
        sigma_sample=sigma_sample)
   #Save result
-  "outputs/mcmc_chain.rda"|>load()
+  save(mcmc_chain,file="outputs/mcmc_chain_.rda")
   mcmc_chain
 }
 
