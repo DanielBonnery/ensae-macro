@@ -42,7 +42,7 @@ list(
                decay=decay,
                exog_std=exog_std)),
   #Settings for mcm chain
-  tar_target(mcmc_settings,list(nchains=0,chains_size=40,burning=10,thining=4)),
+  tar_target(mcmc_settings,list(nchains=0,chains_size=4000,burning=1000,thining=4)),
   #Gibbs sampler draw b and sigma
   tar_target(mcmc_chain,
              mcmc_run(data_ymt=data_ymt,
