@@ -13,14 +13,17 @@ mcmc_observations_f<-function(data_ymt,p,variables_m,variables_y){
 
 
 mcmc_run<-function(data_ymt,variables_m,variables_y,p,empirical_hyper,mcmc_settings){
+    mcmc_settings|>attach()|>suppressMessages()
+  
+  if(!redomcmc){warning("A saved version of the MCMC output will be used instead to save time.
+                        To run the MCMC (takes a looong time), please choose mcmc_settings$redomcmc=TRUE")}
+  if(redomcmc){
   set.seed(1)
   empirical_hyper|>attach()|>suppressMessages()
   mcmc_initial_values_f(data_ymt,variables_m,variables_y,empirical_hyper)|>attach()|>suppressMessages()
   mcmc_observations<-mcmc_observations_f(data_ymt,p,variables_m,variables_y)
   mcmc_observations|>attach()|>suppressMessages()
-  mcmc_settings|>attach()|>suppressMessages()
-  
-  chain_length<-chains_size*thining+burning
+chain_length<-chains_size*thining+burning
   
 
   b_sample<-NULL
@@ -45,10 +48,9 @@ mcmc_run<-function(data_ymt,variables_m,variables_y,p,empirical_hyper,mcmc_setti
   }
   close(pb)
   mcmc_chain=list(b_sample=b_sample,
-       sigma_sample=sigma_sample)
-  #Save result
-  save(mcmc_chain,file="outputs/mcmc_chain_.rda")
-  mcmc_chain
+       sigma_sample=sigma_sample)}
+  else{mcmc_chain<-"outputs/mcmc_chain2.rda"|>load()|>get()}
+    mcmc_chain
 }
 
 #'To save time, just load already computed

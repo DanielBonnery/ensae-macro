@@ -9,6 +9,9 @@ required_packages|>writeLines("requirements.txt")
 setdiff(required_packages,installed.packages()[,"Package"])|>sapply(install.packages)
 
 
+#parameter redomcmc FALSE: use a stored value. TRUE: rerun (take days)
+
+
 #Load some libraries
 library(ggplot2)
 
@@ -42,7 +45,7 @@ list(
                decay=decay,
                exog_std=exog_std)),
   #Settings for mcm chain
-  tar_target(mcmc_settings,list(nchains=0,chains_size=4000,burning=1000,thining=4)),
+  tar_target(mcmc_settings,list(nchains=0,chains_size=4000,burning=1000,thining=4,redomcmc=FALSE)),
   #Gibbs sampler draw b and sigma
   tar_target(mcmc_chain,
              mcmc_run(data_ymt=data_ymt,
