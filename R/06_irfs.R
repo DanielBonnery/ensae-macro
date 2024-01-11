@@ -38,7 +38,6 @@ test_restr<-function(i_mon=1,i_news=2,irfs){
 #'max_attempts=1000
 
 sample_irfs<-function(mcmc_chain,variables_m,variables_y,p,nstep,max_attempts){
-  "outputs/mcmc_chain.rda"|>load()
   set.seed(1)
   dd<- dim(mcmc_chain$b_sample)
   N=dd[2]

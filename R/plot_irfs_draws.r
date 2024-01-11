@@ -7,7 +7,8 @@ plot_irfs_sample <- function(
     variables_y,
     irfs_sample,
     dictionnary,
-    path_out="outputs/the_plot_irfs.pdf"){
+    path_out="outputs/the_plot_irfs.pdf",
+    portrait=FALSE){
     variables_my<-c(variables_m,variables_y)
     irfs_sample|>
         plyr::aaply(1:3,
@@ -45,24 +46,26 @@ plot_irfs_sample <- function(
                                     "50%")))->qqdf1
     
     
-    
-       
     theplot<-
         qqdf    |>
-            ggplot2::ggplot(aes(x=time,y=`50%`,group=interaction(shock_of,on)))+
-            geom_ribbon(aes(ymin=`5%`,ymax=`95%`),alpha=.15,fill="orange")+
-            geom_ribbon(aes(ymin=`16%`,ymax=`84%`),alpha=.5,fill="orange")+
-            geom_line(data=qqdf1,aes(x=time,y=value,group=quantile,size=sizeqline),
-                      colour="black")+
-            geom_hline(yintercept=0,size=.2)+
-            facet_grid(on2~shock_of2,scales = "free_y")+
-            xlab("Months")+ylab("")+
-            theme_bw()+
-            scale_size_manual("",values=c("5% - 95%"=.1,"16% - 84%"=.2,"50%"=.5))+
-            theme(legend.position = "bottom")
-        theplot|>
-        ggsave(filename=path_out,width = 19,height=25,units = "cm")
-    
+        ggplot2::ggplot(aes(x=time,y=`50%`,group=interaction(shock_of,on)))+
+        geom_ribbon(aes(ymin=`5%`,ymax=`95%`),alpha=.15,fill="orange")+
+        geom_ribbon(aes(ymin=`16%`,ymax=`84%`),alpha=.5,fill="orange")+
+        geom_line(data=qqdf1,aes(x=time,y=value,group=quantile,size=sizeqline),
+                  colour="black")+
+        geom_hline(yintercept=0,size=.2)+
+        xlab("Months")+ylab("")+
+        theme_bw()+
+        scale_size_manual("",values=c("5% - 95%"=.1,"16% - 84%"=.2,"50%"=.5))+
+        theme(legend.position = "bottom")
+        if(portrait){theplot=theplot+facet_grid(shock_of2~on2,scales = "free_x")+
+                coord_flip()
+            }else{theplot=theplot+
+                facet_grid(on2~shock_of2,scales = "free_y")}
+
+    theplot|>
+        ggsave(filename=path_out,width = if(portrait){20}else{19},height=if(portrait){14}else{25},units = "cm")
+    theplot
     
 }
 
